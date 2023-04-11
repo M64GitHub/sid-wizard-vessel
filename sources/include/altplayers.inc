@@ -98,7 +98,29 @@ SetTypeIcon ;embed the Light / Medium / Bare / Demo / Extra player-type texts in
         cpx #3*7
         bne -
         inc banksel
-+       rts
+; +       rts
+
+; m64
++       lda #$34
+        sta banksel     ;switch off IO, reveal RAM under it
+        ldx #0
+-       lda m64spr,y
+        sta updispr+4*$40+6*3,x
+        iny
+        inx
+        inx
+        inx
+        cpx #3*7
+        bne -
+        inc banksel
+        rts
+m64spr  .byte %11111111
+m64spr1 .byte %00001100
+m64spr2 .byte %01010101
+m64spr3 .byte %01010100
+m64spr4 .byte %01010101
+m64spr5 .byte %00100101
+m64spr6 .byte %00001111
         .fi
 
 PlrList = (normalPlayer, mediumPlayer, lightPlayer, extraPlayer, barePlayer, demoPlayer)
