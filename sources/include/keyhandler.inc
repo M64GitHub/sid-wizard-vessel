@@ -93,8 +93,8 @@ keyjmp .section data ;keyboard-jumptable                                     ;- 
  .send data
 
 menukeys .section data  
-              ;ret,  F7,  curdn,stop, +  ,  -  ,  F1 ,  F3 ,  <-  , /  ,  Home, uparrow (page-down)
-        .byte $01*2,$03*2,$07*2,$3F*2,$28*2,$2B*2,$04*2,$05*2,$39*2,$37*2,$33*2,$36*2 ;allowed key-codes in menu (multplied by 2)
+              ;ret , F7   , curdn, stop , +    , -    , F1   , F3   ,   <- , /    , Home , uparrow (page-down)
+        .byte $01*2, $03*2, $07*2, $3F*2, $28*2, $2B*2, $04*2, $05*2, $39*2, $37*2, $33*2, $36*2   ; allowed key-codes in menu (multplied by 2)
         .send data
 
         .else
@@ -1440,6 +1440,14 @@ cursrdn .proc           ;cursor-down key handler
 ;------------------------------------------------Cursor UP branch--------------
 ptcurup=norcrup.ptcurup
 norcrup .proc
+; m64
+        lda VESSELMODE
+        beq +
+        dec player.SEQPOS
+        dec player.SEQPOS+7
+        dec player.SEQPOS+14
+        rts
++
         lda menumode
         bne menucup
         lda curwind
@@ -1555,6 +1563,15 @@ norcrdn .proc
 
         ;pattern window
 ptcurdn .proc
+; m64
+        lda VESSELMODE
+        beq +
+        inc player.SEQPOS
+        inc player.SEQPOS+7
+        inc player.SEQPOS+14
+        rts
+
++
         jsr commonsubs.compcur ;common point to go down in pattern, used by pagedown,return,etc.
         beq +           ;if cursor is at last row of pattern
         lda subwpos3+0  ;Y position in pattern-window
@@ -1957,6 +1974,9 @@ f1er .proc              ;F1 key handler (reset and play whole tune from beginnin
 +
 .if (MIDI_support!=0)
         ; M64 NOTE: MAKE THIS CONFIGURABLE
+
+        lda #$04
+        sta $d02e
         jsr midisubs.sendSt ;start-command to other MIDI-controlled sequencer
 .fi
 PlayBeg ldx #0 ;reset tune and play from beginning
@@ -1989,6 +2009,29 @@ playMrk ;sei
 ;-----------------------
 f4er=f3er.f4er
 f3er .proc              ;F3 key handler (play current pattern from its beginning)
+; m64
+        lda VESSELMODE
+        beq ++
+
+        ; toggle ptn play
+        lda playadapter.playmod
+        cmp #2
+        bne +
+        
+        lda #1
+        sta playadapter.playmod
+        jsr playadapter.ptploff 
+        lda #$04
+        sta $d02e
+        rts
+
++       sta playadapter.playmod
+        jsr playadapter.ptplyon ;switch ON pattern-playing mode in player-code
+        lda #$05
+        sta $d02e
+        rts
+; 
++
         jsr repeatex
         lda Config.KeybTyp     ;SDI-layout? ($88)
         bpl +

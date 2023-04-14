@@ -1,3 +1,4 @@
+
 ; vesselsubs.inc 2021 m64 
 .dsection VESSEL
 .section VESSEL
@@ -17,6 +18,24 @@ DISP_SLOW_SKIP_SPEED = 1        ; every X loops: ptndisp (+everything slow)
 
 DISP_SLOW_SKIP_CNT .byte DISP_SLOW_SKIP_SPEED
 
+; key handling
+
+
+vessel_keys 
+        lda NMI_MIDI_START ; MIDI PLAY START received allready?
+        ; keypress while playing by MIDI CLK
+        ; beq +
+        ; inc $d020
+        lda $dc01
+        bne +
+
+        ; actual key processing
+        ; cmp #14 ; CURDWN
+        ; bne +
+
+        inc $d020
++
+        rts
 
 ; main loop 
 
@@ -48,13 +67,13 @@ _playing lda VESSELMODE
 _vnmi_play        
         dec DISP_SLOW_SKIP_CNT
         bne +
-
-        jsr keyhandler.keyer
         
         lda #1
         sta display.syncscr+1
         lda #0
         sta curwind
+        jsr keyhandler.keyer
+        jsr vessel_keys
 
         lda #DISP_SLOW_SKIP_SPEED
         sta DISP_SLOW_SKIP_CNT
