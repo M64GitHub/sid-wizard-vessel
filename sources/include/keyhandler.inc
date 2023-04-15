@@ -1443,6 +1443,11 @@ norcrup .proc
 ; m64
         lda VESSELMODE
         beq +
+        
+        ldx player.SEQPOS
+        inx
+        beq +
+
         dec player.SEQPOS
         dec player.SEQPOS+7
         dec player.SEQPOS+14
@@ -1566,6 +1571,14 @@ ptcurdn .proc
 ; m64
         lda VESSELMODE
         beq +
+        ldy player.SEQPOS ; ORDERLIST SEQUENCE PLAYPOSITION
+        iny
+        lda SEQUENCES, y ; ORDERLIST T1
+        cmp #$FE
+        beq +
+        cmp #$FF
+        beq +
+
         inc player.SEQPOS
         inc player.SEQPOS+7
         inc player.SEQPOS+14

@@ -134,21 +134,67 @@ do_v_scrn
         ldy #>(vidram+30+40*5+4+4)
         jsr print_hex
 
-        lda player.PTNPOS
+        ; -- POS in PTN
+
+        ; lda player.PTNPOS
+        ; ldx #<(vidram+30+40*7+4)
+        ; ldy #>(vidram+30+40*7+4)
+        ; jsr print_hex
+
+        ; lda player.PTNPOS + 7
+        ; ldx #<(vidram+30+40*7+4+2)
+        ; ldy #>(vidram+30+40*7+4+2)
+        ; jsr print_hex
+
+        ; lda player.PTNPOS + 14
+        ; ldx #<(vidram+30+40*7+4+4)
+        ; ldy #>(vidram+30+40*7+4+4)
+        ; jsr print_hex
+
+        ; -- PREV PTN
+
+        ldy player.SEQPOS ; ORDERLIST SEQUENCE PLAYPOSITION
+        dey
+        lda SEQUENCES, y ; ORDERLIST T1
+
         ldx #<(vidram+30+40*7+4)
         ldy #>(vidram+30+40*7+4)
-        jsr print_hex
 
-        lda player.PTNPOS + 7
+        cmp #$00
+        bne + 
+        jsr print_minus
+        jmp ++
++
+        jsr print_hex
++
+        ldy player.SEQPOS+7 ; ORDERLIST SEQUENCE PLAYPOSITION
+        dey
+        lda SEQUENCES+seqbound, y ; ORDERLIST T1
+
         ldx #<(vidram+30+40*7+4+2)
         ldy #>(vidram+30+40*7+4+2)
-        jsr print_hex
 
-        lda player.PTNPOS + 14
+        cmp #$00
+        bne + 
+        jsr print_minus
+        jmp ++
++
+        jsr print_hex
++
+        ldy player.SEQPOS+14 ; ORDERLIST SEQUENCE PLAYPOSITION
+        dey
+        lda SEQUENCES+2*seqbound, y ; ORDERLIST T1
+
         ldx #<(vidram+30+40*7+4+4)
         ldy #>(vidram+30+40*7+4+4)
-        jsr print_hex
 
+        cmp #$00
+        bne + 
+        jsr print_minus
+        jmp ++
++
+        jsr print_hex
++
         jsr v_disp_trackrow1
         jsr v_disp_trackrow2
         jsr v_disp_trackrow3
@@ -354,6 +400,21 @@ storespc4 sta vidram+30+40*6+4
 
         rts
 
+
+print_minus
+        stx storehi3+1
+        sty storehi3+2
+        stx storelo3+1
+        sty storelo3+2
+
+        inc storelo3+1
+        bne +
+        inc storelo3+2
++       lda #'-'
+
+storehi3 sta vidram+30+40*6+4  
+storelo3 sta vidram+30+40*6+4+1
+        rts
 
 print_hex
         stx storehi2+1
@@ -633,7 +694,7 @@ v_scrn_osc_text
         .text "OSC 010203"
         .text " WF 404189"
         .text "INS 010204"
-        .text "POS 101010"
+        .text "PRV 000000"
         .text "PTN 102030"
 
         .byte $20,$00,$10,$00,$61,$63,$61,$63,$61,$63
