@@ -12,30 +12,11 @@ VESSELMODE      .byte 0         ; 0 = off
 
 VESSEL_OVERLAY_PTN .byte 0
 
-DISP_SLOW_SKIP_SPEED = 1        ; every X loops: ptndisp (+everything slow) 
+DISP_SLOW_SKIP_SPEED = 4        ; every X loops: ptndisp (+everything slow) 
                                 ; will be called,
                                 ; else skipped 
 
 DISP_SLOW_SKIP_CNT .byte DISP_SLOW_SKIP_SPEED
-
-; key handling
-
-
-vessel_keys 
-        lda NMI_MIDI_START ; MIDI PLAY START received allready?
-        ; keypress while playing by MIDI CLK
-        ; beq +
-        ; inc $d020
-        lda $dc01
-        bne +
-
-        ; actual key processing
-        ; cmp #14 ; CURDWN
-        ; bne +
-
-        inc $d020
-+
-        rts
 
 ; main loop 
 
@@ -65,27 +46,29 @@ _playing lda VESSELMODE
         jmp goback
 +
 _vnmi_play        
-        dec DISP_SLOW_SKIP_CNT
-        bne +
-        
+        ; -- always do:
         lda #1
         sta display.syncscr+1
         lda #0
         sta curwind
         jsr keyhandler.keyer
-        jsr vessel_keys
 
-        lda #DISP_SLOW_SKIP_SPEED
+        dec DISP_SLOW_SKIP_CNT
+        beq +
+        jmp vessel
+
+        ; -- slow do:
++       lda #DISP_SLOW_SKIP_SPEED
         sta DISP_SLOW_SKIP_CNT
 
-+       ; jsr ptndisp
+        ; jsr ptndisp
         jsr display  
         jsr vessel_overlay_disp ; switched to inst window
+
         jsr playadapter.jamplay
         jsr cursord     ;time:3 rasterlines; put cursor to coordinate & flash colour
         jsr display2
         jsr playadapter.dispScope
-
         jmp vessel      ; NMI will play
 
 goback  jsr display     ;considers menu-display over patterns (based on 'menumode' variable) 
@@ -101,6 +84,7 @@ vessel_overlay_disp
         bne +
         rts
 
+        ; done in nmi
 +       jsr do_v_scrn 
         rts
 

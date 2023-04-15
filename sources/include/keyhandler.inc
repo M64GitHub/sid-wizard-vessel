@@ -1965,6 +1965,18 @@ menuer  lda #1          ;jmp packdepack
 
 ;-----------------------
 f1er .proc              ;F1 key handler (reset and play whole tune from beginning)
+    
+; m64
+        lda VESSELMODE
+        beq +
+
+        lda #$04
+        sta $d02e
+        ldx #1
++       stx playadapter.followp+1 ;if commodore key is pressed together, follow-playing switches ON, else OFF
+
++
+
         jsr repeatex
         lda Config.KeybTyp     ;SDI-layout? ($88)
         bpl + ;PlayBeg
