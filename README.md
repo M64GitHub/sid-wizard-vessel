@@ -1,5 +1,43 @@
 ```
 ;==============================================================================
+;--- Features for live usage added --------------------------------------------
+;04/23                                                                      M64
+;------------------------------------------------------------------------------
+
+This (the current) version has now matured and includes features for use
+in a live act. 
+
+Quick summary:
+
+ - enter sync mode: menu -> sync mode
+ - SID-Wizard is now armed for playback
+ - Press Play on your MIDI gear -> SID Wizard will start playing in sync
+   (Tempo must be set to 06)
+ - Cursor UP/DWN: move back/forward in the orderlist:
+   currently playing pattern is not interrupted, playback will advance after 
+   end of pattern is reached
+   - Note: you can move in orderlist to (virtual) position -1, so next played 
+     pattern is the song start. 
+     (To keep the logic of moving around, and have a way to play the song again 
+     from start)
+ - F3 to hold (loop) the currently played pattern (oscilloscope turns green)
+ - F1 continue (release looping pattern): playback will advance to wherever
+   you moved in the orderlist 
+   (oscilloscope turns purple)
+ - SW standard channel muting/unmuting via SHIFT 1-3
+ - Follow play is always on for better orientation
+ - MIDI stop will exit sync mode. Enter it again to wait for MIDI start 
+   (and all devices will play together from start again)
+ 
+ ![Selection_430](https://user-images.githubusercontent.com/84202356/232265826-bd0bfb01-f728-4c70-bf0b-20333d5b59da.png)
+ 
+ Youtube video describing / showing in more detail:
+ https://.........
+
+```
+
+```
+;==============================================================================
 ;--- external MIDI SYNC IN via NMI --------------------------------------------
 ;09/21                                                                      M64
 ;------------------------------------------------------------------------------
