@@ -1,6 +1,11 @@
-SID-Wizard-Vessel 1.8.7 
+# SID-Wizard-Vessel 1.8.7 
 
-A SID-Wizard version for the Vessel MIDI interface, with features for using in a live act
+A SID-Wizard version for the Vessel MIDI interface, with features for using in a live act.  
+
+ - external MIDI tempo sync
+ - jump inside orderlist
+ - pattern loop / continue
+ - channel mute/unmute
 
 ```
 ;==============================================================================
