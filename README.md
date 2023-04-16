@@ -39,10 +39,10 @@ Quick summary:
    (and all devices will play together from start again)
 ```
  ![Preview](https://user-images.githubusercontent.com/84202356/232265826-bd0bfb01-f728-4c70-bf0b-20333d5b59da.png)
-``` 
- Youtube video describing / showing in more detail:
- https://.........
-```
+ 
+ ### SID-Wizard-Vessel feature demonstration: (Youtube)  
+ [![SID-Wizard-Vessel feature demonstration](http://img.youtube.com/vi/GRh49hOucJw/0.jpg)](http://www.youtube.com/watch?v=GRh49hOucJw )
+
 
 ```
 ;==============================================================================
