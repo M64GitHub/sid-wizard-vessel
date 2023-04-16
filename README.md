@@ -1,3 +1,7 @@
+SID-Wizard-Vessel 1.8.7 
+
+A SID-Wizard version for the Vessel MIDI interface, with features for using in a live act
+
 ```
 ;==============================================================================
 ;--- Features for live usage added --------------------------------------------
