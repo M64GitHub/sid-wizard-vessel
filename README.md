@@ -1,4 +1,4 @@
-# SID-Wizard-Vessel 1.8.7 
+# SID-Wizard-Vessel 1.8.7 / live sync
 
 A SID-Wizard version for the Vessel MIDI interface, with features for using in a live act.  
 
