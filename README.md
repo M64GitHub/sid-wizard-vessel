@@ -2,7 +2,7 @@
 
 A SID-Wizard version for the Vessel MIDI interface, with features for using in a live act.  
 
- - external MIDI tempo sync
+ - external MIDI tempo sync IN
  - move playback position freely inside orderlist
  - pattern loop / continue
  - channel mute/unmute
